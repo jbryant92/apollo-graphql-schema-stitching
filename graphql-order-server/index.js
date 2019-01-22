@@ -92,5 +92,5 @@ const resolvers = {
 const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen({ port: 4002 }).then(({ url }) => {
-  console.log(`🚀  Order server ready at ${url}`);
+  console.log(`Order server ready at ${url}`);
 });
