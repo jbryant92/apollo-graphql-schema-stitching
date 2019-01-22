@@ -69,7 +69,6 @@ const typeDefs = gql`
 
 // Define some resolvers where we stitch together the data
 // This servics has a few entry points for fetching specific data
-
 const resolvers = {
   Query: {
     orderItems: () => orderItemData,

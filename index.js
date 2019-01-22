@@ -47,6 +47,15 @@ const createSchema = async () => {
       product: Product
       status: String
     }
+
+    extend type Order {
+      comments: [Comment]
+    }
+
+    type Comment {
+      user: String
+      message: String
+    }
   `
 
   // Merge the schemas with additional type definitions
@@ -89,6 +98,15 @@ const createSchema = async () => {
             })
           }
         }
+      },
+      Order: {
+        comments: {
+          resolve: async (order, args, context, info) => {
+            const res = await fetch(`http://localhost:4003/orders/${order.id}/comments`);
+            const comments = await res.json();
+            return comments;
+          }
+        }
       }
     }
   });
@@ -107,7 +125,7 @@ createSchema().then(schema => {
   });
 
   server.applyMiddleware({ app });
-  console.log(`Main server ready at http://localhost:4001${server.graphqlPath}`);
+  console.log(`Main server ready at http://localhost:4000${server.graphqlPath}`);
 });
 
 app.listen(4000)

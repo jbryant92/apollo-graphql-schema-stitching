@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server');
+const  fetch = require("node-fetch");
 
 // Stub some order data.
 // Each order has some details, and some items which were placed in the order
@@ -59,10 +60,11 @@ const typeDefs = gql`
   }
 `;
 
+// Add resolvers
 const resolvers = {
   Query: {
     orders: () => orderData,
-  },
+  }
 };
 
 // Setup the server
