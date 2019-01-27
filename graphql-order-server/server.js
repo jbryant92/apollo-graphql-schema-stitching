@@ -2,24 +2,24 @@ const { ApolloServer, gql } = require('apollo-server');
 const  fetch = require("node-fetch");
 
 // Stub some order data.
-// Each order has some details, and some items which were placed in the order
-// This service only stores the item id and a product id.
+// Each order has some details, and some surveys which were placed in the order
+// This service only stores the survey id and a product id.
 const orderData = [
   {
     id: 1,
     title: 'New order #1234',
     customer: 'Frances Roberts',
-    items: [
+    surveys: [
       {
-        id: 1,
+        surveyId: 1,
         productId: 123
       },
       {
-        id: 2,
+        surveyId: 2,
         productId: 124
       },
       {
-        id: 3,
+        surveyId: 3,
         productId: 123
       },
     ]
@@ -28,13 +28,13 @@ const orderData = [
     id: 2,
     title: 'New order #1235',
     customer: 'Matilda Barlow',
-    items: [
+    surveys: [
       {
-        id: 4,
+        surveyId: 4,
         productId: 124
       },
       {
-        id: 5,
+        surveyId: 5,
         productId: 123
       },
     ]
@@ -47,11 +47,11 @@ const typeDefs = gql`
     id: Int
     title: String
     customer: String
-    items: [Item]
+    surveys: [StoreSurvey]
   }
 
-  type Item {
-    id: Int
+  type StoreSurvey {
+    surveyId: Int
     productId: Int
   }
 

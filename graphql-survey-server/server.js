@@ -1,9 +1,8 @@
 const { ApolloServer, gql } = require('apollo-server'),
   { find } = require('lodash')
 
-// Stub some item and product data
-// This service stores more details data on each item placed
-const orderItemData = [
+// Stub some survey and product data
+const surveyData = [
   {
     id: 1,
     productId: 123,
@@ -47,7 +46,7 @@ const productData = [
 
 // Define the types
 const typeDefs = gql`
-  type OrderItem {
+  type Survey {
     id: Int
     status: String
     product: Product
@@ -60,10 +59,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    orderItems: [OrderItem]
+    surveys: [Survey]
     products: [Product]
     product(id: Int): Product
-    orderItemStatus(id: Int): String
+    surveyStatus(id: Int): String
   }
 `;
 
@@ -71,16 +70,16 @@ const typeDefs = gql`
 // This servics has a few entry points for fetching specific data
 const resolvers = {
   Query: {
-    orderItems: () => orderItemData,
+    surveys: () => surveyData,
     products: () => productData,
     product(obj, args, context, info) {
       return find(productData, { id: args.id });
     },
-    orderItemStatus(obj, args, context, info) {
-      return find(orderItemData, { id: args.id }).status;
+    surveyStatus(obj, args, context, info) {
+      return find(surveyData, { id: args.id }).status;
     }
   },
-  OrderItem: {
+  Survey: {
     product(obj, args, context, info) {
       return find(productData, { id: obj.productId });
     }

@@ -4,9 +4,9 @@ const port = 4003
 
 const commentsData = {
   1: [
-    { user: 'bob', message: 'hello' },
-    { user: 'sam', message: 'hi bob' },
-    { user: 'bob', message: 'not cool' }
+    { user: 'bob', message: 'this order is having issues' },
+    { user: 'sam', message: 'i can take a look' },
+    { user: 'bob', message: 'thanks' }
   ],
   2: [
     { user: 'jim', message: 'something is happening here' },
@@ -15,7 +15,7 @@ const commentsData = {
   ]
 }
 
-app.get('/orders/:orderId/comments/', function (req, res) {
+app.get('/orders/:orderId/comments', function (req, res) {
   res.send(commentsData[req.params.orderId])
 })
 

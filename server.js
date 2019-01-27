@@ -8,42 +8,42 @@ const express = require("express"),
 // Build up a linked GraphQL Schema
 const createSchema = async () => {
   // Build store service schema
-  const createStoreServiceSchema = async () => {
-    const storeServiceLink = createHttpLink({
+  const createorderServiceSchema = async () => {
+    const orderServiceLink = createHttpLink({
       uri: `http://localhost:4001/`,
       fetch
     });
 
-    const schema = await introspectSchema(storeServiceLink);
+    const schema = await introspectSchema(orderServiceLink);
 
     return makeRemoteExecutableSchema({
       schema,
-      link: storeServiceLink
+      link: orderServiceLink
     });
   };
 
   // Build orders service schema
-  const createOrdersServiceSchema = async () => {
-    const ordersServiceLink = createHttpLink({
+  const createsurveyServiceSchema = async () => {
+    const surveyServiceLink = createHttpLink({
       uri: `http://localhost:4002/`,
       fetch
     });
 
-    const schema = await introspectSchema(ordersServiceLink);
+    const schema = await introspectSchema(surveyServiceLink);
 
     return makeRemoteExecutableSchema({
       schema,
-      link: ordersServiceLink
+      link: surveyServiceLink
     });
   };
 
   // Wait for the introspect actions to complete so we have the completed schemas
-  const storeServiceSchema = await createStoreServiceSchema();
-  const ordersServiceSchema = await createOrdersServiceSchema();
+  const orderServiceSchema = await createorderServiceSchema();
+  const surveyServiceSchema = await createsurveyServiceSchema();
 
   // Add some additional fields based on data from both the sources
   const linkTypeDefs = `
-    extend type Item {
+    extend type StoreSurvey {
       product: Product
       status: String
     }
@@ -62,21 +62,21 @@ const createSchema = async () => {
   // Here we can also apply extra resolvers to fill out the Item type with extra fields
   return mergeSchemas({
     schemas: [
-      storeServiceSchema,
-      ordersServiceSchema,
+      orderServiceSchema,
+      surveyServiceSchema,
       linkTypeDefs
     ],
     resolvers: {
-      Item: {
+      StoreSurvey: {
         product: {
-          fragment: `... on OrderItem { productId }`,
-          resolve(orderItem, args, context, info) {
+          fragment: `... on StoreSurvey { productId }`,
+          resolve(storeSurvey, args, context, info) {
             return info.mergeInfo.delegateToSchema({
-              schema: ordersServiceSchema,
+              schema: surveyServiceSchema,
               operation: 'query',
               fieldName: 'product',
               args: {
-                id: orderItem.productId
+                id: storeSurvey.productId
               },
               context,
               info
@@ -84,14 +84,14 @@ const createSchema = async () => {
           }
         },
         status: {
-          fragment: `... on OrderItem { id }`,
-          resolve(orderItem, args, context, info) {
+          fragment: `... on StoreSurvey { surveyId }`,
+          resolve(storeSurvey, args, context, info) {
             return info.mergeInfo.delegateToSchema({
-              schema: ordersServiceSchema,
+              schema: surveyServiceSchema,
               operation: 'query',
-              fieldName: 'orderItemStatus',
+              fieldName: 'surveyStatus',
               args: {
-                id: orderItem.id
+                id: storeSurvey.surveyId
               },
               context,
               info

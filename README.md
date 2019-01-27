@@ -1,22 +1,23 @@
-# apollo-graphql-schema-stitching
+# Apollo GraphQL Schema Stitching
+
 An example of stitching 2 GraphQL schemas together and mixing in a REST endpoint so they can be served under a single endpoint with some merged cross schema data.
 
 ## Setup
 
-To run, launch all 3 apollo servers:
+To run, you need to run 4 servers:
 
-In `graphql-store-server` run: `node index.js`
-This will launch a server at `http://localhost:4001/`.
-Navigate to `http://localhost:4001/` to use GraphiQL to use the store server.
+```
+# Launch the orders server
+> graphql-order-server/server.js
 
-In `graphql-order-server` run: `node index.js`
-This will launch a server at `http://localhost:4002/`.
-Navigate to `http://localhost:4002/` to use GraphiQL to use the orders server.
+# Launch the surveys server
+> graphql-survey-server/server.js
 
-In the `rest-comments-server` run: `node index.js`
-This will launch a server at `http://localhost:4003`.
-You can inspect the data by hitting `http://localhost:4003/orders/:orderId/comments`.
+# Launch the comments server
+> rest-comments-server/server.js
 
-In the root directory run: `node index.js`
-This will launch a server at `http://localhost:4000/`.
-`http://localhost:4000/graphql` to use to use GraphiQL to use the merged server.
+# Launch the stitching server
+> server.js
+```
+
+Each server will point you to where it can be directly accessed. For more information visit [the Apollo GraphQL website](https://www.apollographql.com/).
